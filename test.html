@@ -1,0 +1,95 @@
+<script> Sfdump = window.Sfdump || (function (doc) { var refStyle = doc.createElement('style'), rxEsc = /([.*+?^${}()|\[\]\/\\])/g, idRx = /\bsf-dump-\d+-ref[012]\w+\b/, keyHint = 0 <= navigator.platform.toUpperCase().indexOf('MAC') ? 'Cmd' : 'Ctrl', addEventListener = function (e, n, cb) { e.addEventListener(n, cb, false); }; doc.documentElement.firstChild.appendChild(refStyle); if (!doc.addEventListener) { addEventListener = function (element, eventName, callback) { element.attachEvent('on' + eventName, function (e) { e.preventDefault = function () {e.returnValue = false;}; e.target = e.srcElement; callback(e); }); }; } function toggle(a, recursive) { var s = a.nextSibling || {}, oldClass = s.className, arrow, newClass; if ('sf-dump-compact' == oldClass) { arrow = '&#9660;'; newClass = 'sf-dump-expanded'; } else if ('sf-dump-expanded' == oldClass) { arrow = '&#9654;'; newClass = 'sf-dump-compact'; } else { return false; } a.lastChild.innerHTML = arrow; s.className = newClass; if (recursive) { try { a = s.querySelectorAll('.'+oldClass); for (s = 0; s < a.length; ++s) { if (a[s].className !== newClass) { a[s].className = newClass; a[s].previousSibling.lastChild.innerHTML = arrow; } } } catch (e) { } } return true; }; return function (root) { root = doc.getElementById(root); function a(e, f) { addEventListener(root, e, function (e) { if ('A' == e.target.tagName) { f(e.target, e); } else if ('A' == e.target.parentNode.tagName) { f(e.target.parentNode, e); } }); }; function isCtrlKey(e) { return e.ctrlKey || e.metaKey; } addEventListener(root, 'mouseover', function (e) { if ('' != refStyle.innerHTML) { refStyle.innerHTML = ''; } }); a('mouseover', function (a) { if (a = idRx.exec(a.className)) { try { refStyle.innerHTML = 'pre.sf-dump .'+a[0]+'{background-color: #B729D9; color: #FFF !important; border-radius: 2px}'; } catch (e) { } } }); a('click', function (a, e) { if (/\bsf-dump-toggle\b/.test(a.className)) { e.preventDefault(); if (!toggle(a, isCtrlKey(e))) { var r = doc.getElementById(a.getAttribute('href').substr(1)), s = r.previousSibling, f = r.parentNode, t = a.parentNode; t.replaceChild(r, a); f.replaceChild(a, s); t.insertBefore(s, r); f = f.firstChild.nodeValue.match(indentRx); t = t.firstChild.nodeValue.match(indentRx); if (f && t && f[0] !== t[0]) { r.innerHTML = r.innerHTML.replace(new RegExp('^'+f[0].replace(rxEsc, '\\$1'), 'mg'), t[0]); } if ('sf-dump-compact' == r.className) { toggle(s, isCtrlKey(e)); } } if (doc.getSelection) { try { doc.getSelection().removeAllRanges(); } catch (e) { doc.getSelection().empty(); } } else { doc.selection.empty(); } } }); var indentRx = new RegExp('^('+(root.getAttribute('data-indent-pad') || ' ').replace(rxEsc, '\\$1')+')+', 'm'), elt = root.getElementsByTagName('A'), len = elt.length, i = 0, t = []; while (i < len) t.push(elt[i++]); elt = root.getElementsByTagName('SAMP'); len = elt.length; i = 0; while (i < len) t.push(elt[i++]); root = t; len = t.length; i = t = 0; while (i < len) { elt = root[i]; if ("SAMP" == elt.tagName) { elt.className = "sf-dump-expanded"; a = elt.previousSibling || {}; if ('A' != a.tagName) { a = doc.createElement('A'); a.className = 'sf-dump-ref'; elt.parentNode.insertBefore(a, elt); } else { a.innerHTML += ' '; } a.title = (a.title ? a.title+'\n[' : '[')+keyHint+'+click] Expand all children'; a.innerHTML += '<span>&#9660;</span>'; a.className += ' sf-dump-toggle'; if ('sf-dump' != elt.parentNode.className) { toggle(a); } } else if ("sf-dump-ref" == elt.className && (a = elt.getAttribute('href'))) { a = a.substr(1); elt.className += ' '+a; if (/[\[{]$/.test(elt.previousSibling.nodeValue)) { a = a != elt.nextSibling.id && doc.getElementById(a); try { t = a.nextSibling; elt.appendChild(a); t.parentNode.insertBefore(a, t); if (/^[@#]/.test(elt.innerHTML)) { elt.innerHTML += ' <span>&#9654;</span>'; } else { elt.innerHTML = '<span>&#9654;</span>'; elt.className = 'sf-dump-ref'; } elt.className += ' sf-dump-toggle'; } catch (e) { if ('&' == elt.innerHTML.charAt(0)) { elt.innerHTML = '&#8230;'; elt.className = 'sf-dump-ref'; } } } } ++i; } }; })(document); </script> <style> pre.sf-dump { display: block; white-space: pre; padding: 5px; } pre.sf-dump span { display: inline; } pre.sf-dump .sf-dump-compact { display: none; } pre.sf-dump abbr { text-decoration: none; border: none; cursor: help; } pre.sf-dump a { text-decoration: none; cursor: pointer; border: 0; outline: none; }pre.sf-dump{background-color:#fff; color:#222; line-height:1.2em; font-weight:normal; font:12px Monaco, Consolas, monospace; word-wrap: break-word; white-space: pre-wrap; position:relative; z-index:100000}pre.sf-dump .sf-dump-num{color:#a71d5d}pre.sf-dump .sf-dump-const{color:#795da3}pre.sf-dump .sf-dump-str{color:#df5000}pre.sf-dump .sf-dump-cchr{color:#222}pre.sf-dump .sf-dump-note{color:#a71d5d}pre.sf-dump .sf-dump-ref{color:#a0a0a0}pre.sf-dump .sf-dump-public{color:#795da3}pre.sf-dump .sf-dump-protected{color:#795da3}pre.sf-dump .sf-dump-private{color:#795da3}pre.sf-dump .sf-dump-meta{color:#b729d9}pre.sf-dump .sf-dump-key{color:#df5000}pre.sf-dump .sf-dump-index{color:#a71d5d}</style><pre class=sf-dump id=sf-dump-901456678 data-indent-pad="  "><abbr title="Illuminate\Http\Request" class=sf-dump-note>Request</abbr> {<a class=sf-dump-ref>#42</a><samp>
+  #<span class=sf-dump-protected title="Protected property">json</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title="Protected property">userResolver</span>: <span class=sf-dump-note>Closure</span> {<a class=sf-dump-ref>#26</a><samp>
+    <span class=sf-dump-meta>class</span>: "<span class=sf-dump-str title="25 characters">Laravel\Lumen\Application</span>"
+    <span class=sf-dump-meta>this</span>: <abbr title="Laravel\Lumen\Application" class=sf-dump-note>Application</abbr> {<a class=sf-dump-ref href=#sf-dump-901456678-ref22 title="2 occurrences">#2</a> &#8230;}
+    <span class=sf-dump-meta>file</span>: "<span class=sf-dump-str title="85 characters">/Users/viget/Sites/Personal/termit/vendor/laravel/lumen-framework/src/Application.php</span>"
+    <span class=sf-dump-meta>line</span>: "<span class=sf-dump-str title="10 characters">658 to 660</span>"
+  </samp>}
+  #<span class=sf-dump-protected title="Protected property">routeResolver</span>: <span class=sf-dump-note>Closure</span> {<a class=sf-dump-ref>#33</a><samp>
+    <span class=sf-dump-meta>class</span>: "<span class=sf-dump-str title="25 characters">Laravel\Lumen\Application</span>"
+    <span class=sf-dump-meta>this</span>: <abbr title="Laravel\Lumen\Application" class=sf-dump-note>Application</abbr> {<a class=sf-dump-ref href=#sf-dump-901456678-ref22 title="2 occurrences">#2</a> &#8230;}
+    <span class=sf-dump-meta>file</span>: "<span class=sf-dump-str title="85 characters">/Users/viget/Sites/Personal/termit/vendor/laravel/lumen-framework/src/Application.php</span>"
+    <span class=sf-dump-meta>line</span>: "<span class=sf-dump-str title="10 characters">660 to 662</span>"
+  </samp>}
+  +<span class=sf-dump-public title="Public property">attributes</span>: <abbr title="Symfony\Component\HttpFoundation\ParameterBag" class=sf-dump-note>ParameterBag</abbr> {<a class=sf-dump-ref>#44</a><samp>
+    #<span class=sf-dump-protected title="Protected property">parameters</span>: []
+  </samp>}
+  +<span class=sf-dump-public title="Public property">request</span>: <abbr title="Symfony\Component\HttpFoundation\ParameterBag" class=sf-dump-note>ParameterBag</abbr> {<a class=sf-dump-ref href=#sf-dump-901456678-ref250 title="2 occurrences">#50</a><samp id=sf-dump-901456678-ref250>
+    #<span class=sf-dump-protected title="Protected property">parameters</span>: []
+  </samp>}
+  +<span class=sf-dump-public title="Public property">query</span>: <abbr title="Symfony\Component\HttpFoundation\ParameterBag" class=sf-dump-note>ParameterBag</abbr> {<a class=sf-dump-ref href=#sf-dump-901456678-ref250 title="2 occurrences">#50</a>}
+  +<span class=sf-dump-public title="Public property">server</span>: <abbr title="Symfony\Component\HttpFoundation\ServerBag" class=sf-dump-note>ServerBag</abbr> {<a class=sf-dump-ref>#47</a><samp>
+    #<span class=sf-dump-protected title="Protected property">parameters</span>: <span class=sf-dump-note>array:34</span> [<samp>
+      "<span class=sf-dump-key>DOCUMENT_ROOT</span>" => "<span class=sf-dump-str title="41 characters">/Users/viget/Sites/Personal/termit/public</span>"
+      "<span class=sf-dump-key>REMOTE_ADDR</span>" => "<span class=sf-dump-str title="3 characters">::1</span>"
+      "<span class=sf-dump-key>REMOTE_PORT</span>" => "<span class=sf-dump-str title="5 characters">57611</span>"
+      "<span class=sf-dump-key>SERVER_SOFTWARE</span>" => "<span class=sf-dump-str title="29 characters">PHP 5.5.10 Development Server</span>"
+      "<span class=sf-dump-key>SERVER_PROTOCOL</span>" => "<span class=sf-dump-str title="8 characters">HTTP/1.1</span>"
+      "<span class=sf-dump-key>SERVER_NAME</span>" => "<span class=sf-dump-str title="9 characters">localhost</span>"
+      "<span class=sf-dump-key>SERVER_PORT</span>" => "<span class=sf-dump-str title="4 characters">8000</span>"
+      "<span class=sf-dump-key>REQUEST_URI</span>" => "<span class=sf-dump-str title="7 characters">/create</span>"
+      "<span class=sf-dump-key>REQUEST_METHOD</span>" => "<span class=sf-dump-str title="3 characters">GET</span>"
+      "<span class=sf-dump-key>SCRIPT_NAME</span>" => "<span class=sf-dump-str title="10 characters">/index.php</span>"
+      "<span class=sf-dump-key>SCRIPT_FILENAME</span>" => "<span class=sf-dump-str title="51 characters">/Users/viget/Sites/Personal/termit/public/index.php</span>"
+      "<span class=sf-dump-key>PATH_INFO</span>" => "<span class=sf-dump-str title="7 characters">/create</span>"
+      "<span class=sf-dump-key>PHP_SELF</span>" => "<span class=sf-dump-str title="17 characters">/index.php/create</span>"
+      "<span class=sf-dump-key>HTTP_USER_AGENT</span>" => "<span class=sf-dump-str title="11 characters">curl/7.37.1</span>"
+      "<span class=sf-dump-key>HTTP_HOST</span>" => "<span class=sf-dump-str title="14 characters">localhost:8000</span>"
+      "<span class=sf-dump-key>HTTP_ACCEPT</span>" => "<span class=sf-dump-str title="3 characters">*/*</span>"
+      "<span class=sf-dump-key>REQUEST_TIME_FLOAT</span>" => <span class=sf-dump-num>1437160597.25</span>
+      "<span class=sf-dump-key>REQUEST_TIME</span>" => <span class=sf-dump-num>1437160597</span>
+      "<span class=sf-dump-key>argv</span>" => []
+      "<span class=sf-dump-key>argc</span>" => <span class=sf-dump-num>0</span>
+      "<span class=sf-dump-key>APP_ENV</span>" => "<span class=sf-dump-str title="5 characters">local</span>"
+      "<span class=sf-dump-key>APP_DEBUG</span>" => "<span class=sf-dump-str title="4 characters">true</span>"
+      "<span class=sf-dump-key>APP_KEY</span>" => "<span class=sf-dump-str title="32 characters">f5aqDwOpXK8pnqkj9nFygZJacGOdZRCS</span>"
+      "<span class=sf-dump-key>APP_LOCALE</span>" => "<span class=sf-dump-str title="2 characters">en</span>"
+      "<span class=sf-dump-key>APP_FALLBACK_LOCALE</span>" => "<span class=sf-dump-str title="2 characters">en</span>"
+      "<span class=sf-dump-key>DB_CONNECTION</span>" => "<span class=sf-dump-str title="5 characters">mysql</span>"
+      "<span class=sf-dump-key>DB_HOST</span>" => "<span class=sf-dump-str title="9 characters">127.0.0.1</span>"
+      "<span class=sf-dump-key>DB_PORT</span>" => "<span class=sf-dump-str title="4 characters">3306</span>"
+      "<span class=sf-dump-key>DB_DATABASE</span>" => "<span class=sf-dump-str title="6 characters">termit</span>"
+      "<span class=sf-dump-key>DB_USERNAME</span>" => "<span class=sf-dump-str title="4 characters">root</span>"
+      "<span class=sf-dump-key>DB_PASSWORD</span>" => ""
+      "<span class=sf-dump-key>CACHE_DRIVER</span>" => "<span class=sf-dump-str title="9 characters">memcached</span>"
+      "<span class=sf-dump-key>SESSION_DRIVER</span>" => "<span class=sf-dump-str title="9 characters">memcached</span>"
+      "<span class=sf-dump-key>QUEUE_DRIVER</span>" => "<span class=sf-dump-str title="8 characters">database</span>"
+    </samp>]
+  </samp>}
+  +<span class=sf-dump-public title="Public property">files</span>: <abbr title="Symfony\Component\HttpFoundation\FileBag" class=sf-dump-note>FileBag</abbr> {<a class=sf-dump-ref>#46</a><samp>
+    #<span class=sf-dump-protected title="Protected property">parameters</span>: []
+  </samp>}
+  +<span class=sf-dump-public title="Public property">cookies</span>: <abbr title="Symfony\Component\HttpFoundation\ParameterBag" class=sf-dump-note>ParameterBag</abbr> {<a class=sf-dump-ref>#45</a><samp>
+    #<span class=sf-dump-protected title="Protected property">parameters</span>: []
+  </samp>}
+  +<span class=sf-dump-public title="Public property">headers</span>: <abbr title="Symfony\Component\HttpFoundation\HeaderBag" class=sf-dump-note>HeaderBag</abbr> {<a class=sf-dump-ref>#48</a><samp>
+    #<span class=sf-dump-protected title="Protected property">headers</span>: <span class=sf-dump-note>array:3</span> [<samp>
+      "<span class=sf-dump-key>user-agent</span>" => <span class=sf-dump-note>array:1</span> [<samp>
+        <span class=sf-dump-index>0</span> => "<span class=sf-dump-str title="11 characters">curl/7.37.1</span>"
+      </samp>]
+      "<span class=sf-dump-key>host</span>" => <span class=sf-dump-note>array:1</span> [<samp>
+        <span class=sf-dump-index>0</span> => "<span class=sf-dump-str title="14 characters">localhost:8000</span>"
+      </samp>]
+      "<span class=sf-dump-key>accept</span>" => <span class=sf-dump-note>array:1</span> [<samp>
+        <span class=sf-dump-index>0</span> => "<span class=sf-dump-str title="3 characters">*/*</span>"
+      </samp>]
+    </samp>]
+    #<span class=sf-dump-protected title="Protected property">cacheControl</span>: []
+  </samp>}
+  #<span class=sf-dump-protected title="Protected property">content</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title="Protected property">languages</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title="Protected property">charsets</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title="Protected property">encodings</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title="Protected property">acceptableContentTypes</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title="Protected property">pathInfo</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title="Protected property">requestUri</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title="Protected property">baseUrl</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title="Protected property">basePath</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title="Protected property">method</span>: "<span class=sf-dump-str title="3 characters">GET</span>"
+  #<span class=sf-dump-protected title="Protected property">format</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title="Protected property">session</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title="Protected property">locale</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title="Protected property">defaultLocale</span>: "<span class=sf-dump-str title="2 characters">en</span>"
+</samp>}
+</pre><script>Sfdump("sf-dump-901456678")</script>
