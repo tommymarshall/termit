@@ -20,10 +20,8 @@
     <header class="header">
       <h1>Term-It.com</h1>
       <h2>Get contents of files on someone elses computer.</h2>
-      <p>This sounds incredibly unsafe. Oh well. We'll see what happens. To get started just:</p>
-      <pre>
-        curl http://term-it.com/create
-      </pre>
+      <p>This sounds incredibly unsafe. Oh well. We'll see what happens.</p>
+      <p> To get started just: <code>curl http://term-it.com/create</code></p>
     </header>
     <footer class="footer text-center">
       <small>A quick stunt by <a href="http://viget.com/about/team/tmarshall">Tommy</a></small>
