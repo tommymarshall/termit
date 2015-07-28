@@ -42,7 +42,7 @@ class ProcessController extends Controller
     {
         $bucket = Bucket::generate();
 
-        return "\nExample Usage:\n   curl -F file=@/filename.txt {$bucket->hashPath}\n\n".
+        return "\nExample Usage:\n   curl -F file=@/filename.txt {$bucket->hashPath}/[optional:**name**]\n\n".
                "Retrieve results by visiting (in your browser)\n   {$bucket->adminPath}\n\n".
                "Or just run this command:\n   open -a /Applications/Google\ Chrome.app {$bucket->adminPath}\n\n".PHP_EOL;
     }
