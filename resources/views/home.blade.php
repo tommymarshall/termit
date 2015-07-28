@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Bucket #{{ $bucket->id }}</title>
+  <title>cURLing Terminal Stuff</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
   <style type="text/css" media="screen">
@@ -18,15 +18,10 @@
 <body>
   <div class="container">
     <header class="header">
-      <h1>Bucket #{{ $bucket->id }}</h1>
-      <h2>Results</h2>
+      <h1>Term-It.com</h1>
+      <h2>Get contents of files on someone elses computer.</h2>
+      <p>This sounds incredibly unsafe. Oh well. We'll see what happens.</p>
     </header>
-    @foreach ($assets as $asset)
-      <article>
-        <h3>{{ $asset->by }}'s <small>submission</small></h3>
-        <pre>{{ unserialize($asset->content) }}</pre>
-      </article>
-    @endforeach
     <footer class="footer text-center">
       <small>A quick stunt by <a href="http://viget.com/about/team/tmarshall">Tommy</a></small>
     </footer>
