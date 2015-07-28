@@ -5,8 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 class Asset extends Model {
 
     protected $fillable = [
-        'name',
         'content',
+        'by',
     ];
 
     public function bucket()

@@ -7,14 +7,15 @@ use Illuminate\Http\Request;
 
 class ProcessController extends Controller
 {
-    public function listen(Request $request, $bucket)
+    public function listen(Request $request, $bucket, $name = 'Anonymous')
     {
         if ($bucket = Bucket::where('hash', $bucket)->first())
         {
             if ($file = $request->file('file'))
             {
                 $bucket->assets()->create([
-                    'content' => file_get_contents($request->file('file')->getRealPath())
+                    'by'      => $name,
+                    'content' => serialize(file_get_contents($request->file('file')->getRealPath())),
                 ]);
 
                 return "\nWe saved the contents of the file to this bucket. Thanks Brah!\n".PHP_EOL;
@@ -28,14 +29,9 @@ class ProcessController extends Controller
         {
             if ($bucket->password == $password)
             {
-                $output = [];
+                $assets = $bucket->assets()->get();
 
-                foreach ($bucket->assets()->get() as $asset)
-                {
-                    $output[] = str_replace(["\t", "\n"], ["&nbsp;&nbsp;&nbsp;&nbsp;", "<br>"], $asset->content);
-                }
-
-                return "Results:<br><br>".implode("<br><br>", $output).PHP_EOL;
+                return view('bucket', compact('bucket', 'assets'));
             }
         }
 
@@ -47,6 +43,7 @@ class ProcessController extends Controller
         $bucket = Bucket::generate();
 
         return "\nExample Usage:\n   curl -F file=@/filename.txt {$bucket->hashPath}\n\n".
-               "Retrieve results by:\n   {$bucket->adminPath}\n".PHP_EOL;
+               "Retrieve results by visiting (in your browser)\n   {$bucket->adminPath}\n\n".
+               "Or just run this command:\n   open -a /Applications/Google\ Chrome.app {$bucket->adminPath}\n\n".PHP_EOL;
     }
 }
