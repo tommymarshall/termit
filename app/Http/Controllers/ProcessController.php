@@ -17,7 +17,7 @@ class ProcessController extends Controller
                     'content' => file_get_contents($request->file('file')->getRealPath())
                 ]);
 
-                return "\nWe saved the contents of your to this bucket. Thanks Brah!\n".PHP_EOL;
+                return "\nWe saved the contents of the file to this bucket. Thanks Brah!\n".PHP_EOL;
             }
         }
     }
@@ -29,12 +29,13 @@ class ProcessController extends Controller
             if ($bucket->password == $password)
             {
                 $output = [];
+
                 foreach ($bucket->assets()->get() as $asset)
                 {
-                    $output[] = $asset->content;
+                    $output[] = str_replace(["\t", "\n"], ["&nbsp;&nbsp;&nbsp;&nbsp;", "<br>"], $asset->content);
                 }
 
-                return "Results:\n\n".implode("\n\n", $output).PHP_EOL;
+                return "Results:<br><br>".implode("<br><br>", $output).PHP_EOL;
             }
         }
 
